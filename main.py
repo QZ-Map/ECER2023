@@ -21,8 +21,8 @@ def setup():
     KIPR.set_create_distance(0)
     KIPR.set_create_total_angle(0)
     # start shutdown timer ##disabled 4 testing
-    ##################################################################### wait4light()
-    ################# KIPR.shut_down_in(119) #I don't know, how long the robot can run
+    ## wait4light()
+    ## KIPR.shut_down_in(119)
 
 def wait4light(): # non functional right now
     """ only continuies when starting light has been activated
@@ -44,7 +44,7 @@ def driveStraight(speed_mm_s, distance_mm):
     distance = distance_mm
     print("driving straight for" + distance + "mm" )
     d0 = KIPR.get_create_distance()
-    while d0 + distance < KIPR.get_create_distance():
+    while (d0 + distance) < KIPR.get_create_distance():
         angle = KIPR.get_create_total_angle()
         KIPR.create_drive_direct(speed, speed)
         if KIPR.get_create_total_angle() < angle:
@@ -55,7 +55,10 @@ def driveStraight(speed_mm_s, distance_mm):
 
 ######################################
 setup()
+print("after setup")
 driveStraight(fwd, 100) #need to check distance accuracy
 
 
 #http://192.168.125.1:8888/#/apps/home
+
+
