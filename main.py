@@ -1,8 +1,9 @@
 #!/usr/bin/python
 import os, sys
 import ctypes
-#KIPR=ctypes.CDLL("/usr/lib/libkipr.so") # path on Create bot
-KIPR=ctypes.CDLL("./libkipr.so")
+KIPR=ctypes.CDLL("/usr/lib/libkipr.so")
+
+#KIPR=ctypes.CDLL("./libkipr.so")
 
 ### Strat management ###
 ### stratname = id
@@ -38,26 +39,38 @@ bwd = -100
 def driveStraight(speed_mm_s, distance_mm):
     """ speed in mm/sec, distance in mm
         not testet!!
-        not testet for backward!!
+        Backward unsafe!!! backward!!
     """
+    distance_mm *= 1.1
     speed = speed_mm_s 
     distance = distance_mm
-    print("driving straight for" + distance + "mm" )
+    print("driving straight for" + distance + "mm")
     d0 = KIPR.get_create_distance()
-    while (d0 + distance) < KIPR.get_create_distance():
-        angle = KIPR.get_create_total_angle()
+    if speed > 0:
+        while d0 + distance > KIPR.get_create_distance():
+            angle = KIPR.get_create_total_angle()
+            KIPR.create_drive_direct(speed, speed)
+            if KIPR.get_create_total_angle() < angle:
+                KIPR.create_drive_direct(speed, speed/2)
+                print("left")
+            if KIPR.get_create_total_angle() > angle:
+                KIPR.create_drive_direct(speed/2, speed)
+                print("right")
+            KIPR.msleep(1) # should we delete this?
+    else:
+        while d0 + distance > KIPR.get_create_distance():
+            KIPR.msleep(1) # should we delete this?
         KIPR.create_drive_direct(speed, speed)
-        if KIPR.get_create_total_angle() < angle:
-            KIPR.create_drive_direct(speed, speed/2)
-        if KIPR.get_create_total_angle() > angle:
-            KIPR.create_drive_direct(speed/2, speed)
-        KIPR.msleep(1) # should we delete this?
+    KIPR.create_drive_direct(0, 0)
+    return
 
 ######################################
+print("before setup")
 setup()
 print("after setup")
-driveStraight(fwd, 100) #need to check distance accuracy
-
+driveStraight(fwd, 1000) #need to check distance accuracy
+#driveStraight(-300, -500) #need to check distance accuracy
+print("after all")
 
 #http://192.168.125.1:8888/#/apps/home
 
