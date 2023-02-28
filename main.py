@@ -44,7 +44,7 @@ def driveStraight(speed_mm_s, distance_mm):
     distance_mm *= 1.1
     speed = speed_mm_s 
     distance = distance_mm
-    print("driving straight for" + distance + "mm")
+    #print("driving straight for" + distance + "mm")
     d0 = KIPR.get_create_distance()
     if speed > 0:
         while d0 + distance > KIPR.get_create_distance():
@@ -58,9 +58,10 @@ def driveStraight(speed_mm_s, distance_mm):
                 print("right")
             KIPR.msleep(1) # should we delete this?
     else:
-        while d0 + distance > KIPR.get_create_distance():
+        print ("hit the else")
+        while d0 - distance < KIPR.get_create_distance():
+            KIPR.create_drive_direct(speed, speed)
             KIPR.msleep(1) # should we delete this?
-        KIPR.create_drive_direct(speed, speed)
     KIPR.create_drive_direct(0, 0)
     return
 
@@ -69,7 +70,7 @@ print("before setup")
 setup()
 print("after setup")
 driveStraight(fwd, 1000) #need to check distance accuracy
-#driveStraight(-300, -500) #need to check distance accuracy
+driveStraight(-300, 500) #need to check distance accuracy
 print("after all")
 
 #http://192.168.125.1:8888/#/apps/home
