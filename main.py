@@ -25,6 +25,18 @@ def setup():
     ## wait4light()
     ## KIPR.shut_down_in(119)
 
+
+def RealDistance():
+    return KIPR.get_create_distance() * 0.9 # Factor needs to be tested
+def RealDistance(dist):
+    return KIPR.set_create_distance(dist/0.9)  # Factor needs to be tested
+
+def RealRotation():
+    return KIPR.get_create_distance() * 0.8 # Factor needs to be tested
+def RealRotation(deg):
+    return KIPR.set_create_distance(deg/0.8)  # Factor needs to be tested
+
+
 def wait4light(): # non functional right now
     """ only continuies when starting light has been activated
     """
@@ -41,25 +53,17 @@ def driveStraight(speed_mm_s, distance_mm):
         not testet!!
         Backward unsafe!!! backward!!
     """
-    distance_mm *= 1.1
     speed = speed_mm_s 
     distance = distance_mm
     #print("driving straight for" + distance + "mm")
-    d0 = KIPR.get_create_distance()
+    d0 = RealDistance()
     if speed > 0:
-        while d0 + distance > KIPR.get_create_distance():
-            angle = KIPR.get_create_total_angle()
+        while d0 + distance > RealDistance():
             KIPR.create_drive_direct(speed, speed)
-            if KIPR.get_create_total_angle() < angle:
-                KIPR.create_drive_direct(speed, speed/2)
-                print("left")
-            if KIPR.get_create_total_angle() > angle:
-                KIPR.create_drive_direct(speed/2, speed)
-                print("right")
             KIPR.msleep(1) # should we delete this?
     else:
         print ("hit the else")
-        while d0 - distance < KIPR.get_create_distance():
+        while d0 - distance < RealDistance():
             KIPR.create_drive_direct(speed, speed)
             KIPR.msleep(1) # should we delete this?
     KIPR.create_drive_direct(0, 0)
@@ -69,9 +73,28 @@ def driveStraight(speed_mm_s, distance_mm):
 print("before setup")
 setup()
 print("after setup")
-driveStraight(fwd, 1000) #need to check distance accuracy
-driveStraight(-300, 500) #need to check distance accuracy
+#driveStraight(fwd, 1000) #need to check distance accuracy
+#driveStraight(-300, 500) #need to check distance accuracy
+
+
+
+def testAnalog():
+    print("agr")
+    print("left:" + str(KIPR.get_create_lcliff_amt()))
+    print("left front:" + str(KIPR.get_create_lfcliff_amt()))
+    print("Right" + str(KIPR.get_create_rcliff_amt()))
+    print("right front:" + str(KIPR.get_create_rfcliff_amt()))
+
+
+# while True:
+#     print("gogog")
+#     testAnalog()
+#     KIPR.msleep(100)
 print("after all")
+
+
+
+
 
 #http://192.168.125.1:8888/#/apps/home
 
