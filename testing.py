@@ -1,3 +1,8 @@
+#!/usr/bin/python
+import os, sys
+import ctypes
+KIPR=ctypes.CDLL("/usr/lib/libkipr.so")
+
 # Testing code, has nothing to do with main.py
 def testAnalog():
     print("agr")
