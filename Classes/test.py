@@ -1,4 +1,4 @@
-def slow_movement(position: int, time: int = 1000) -> None:
+def slow_movement(position, time = 1000):
     """ Move the servo slowly to a specific position in a specified total time in ms """
     currentPos = 1000
     startPos = currentPos
@@ -13,4 +13,4 @@ def slow_movement(position: int, time: int = 1000) -> None:
         print(f"move to: {startPos+stepSize*x}, wait: {stepTime}")
     print(f"move to: {position}")
 
-slow_movement(605, 10)
+slow_movement(990, 100)

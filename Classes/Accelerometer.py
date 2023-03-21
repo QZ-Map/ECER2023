@@ -4,7 +4,7 @@ class Accelerometer:
     """
 
     @staticmethod
-    def accel_x() -> int:
+    def accel_x():
         """
         Gets the sensed x acceleration +/- 2G range, 1024 per G.
         This should be approximately 0 when at rest and flat on a table.
@@ -16,7 +16,7 @@ class Accelerometer:
         return KIPR.accel_x()
 
     @staticmethod
-    def accel_y() -> int:
+    def accel_y():
         """
         Gets the sensed y acceleration +/- 2G range, 1024 per G.
         This should be approximately 0 when at rest and flat on a table.
@@ -28,7 +28,7 @@ class Accelerometer:
         return KIPR.accel_y()
 
     @staticmethod
-    def accel_z() -> int:
+    def accel_z():
         """
         Gets the sensed z acceleration +/- 2G range, 1024 per G.
         This should be approximately -1024 when at rest and flat on a table.
@@ -40,7 +40,7 @@ class Accelerometer:
         return KIPR.accel_z()
 
     @staticmethod
-    def accel_calibrate() -> int:
+    def accel_calibrate():
         """
         Initiates a calibration of the accelerometer.
 

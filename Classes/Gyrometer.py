@@ -1,6 +1,6 @@
 class Gyrometer:
     @staticmethod
-    def gyro_x() -> int:
+    def gyro_x():
         """Gets the sensed x rotation.
 
         Returns:
@@ -9,7 +9,7 @@ class Gyrometer:
         return KIPR.gyro_x()
 
     @staticmethod
-    def gyro_y() -> int:
+    def gyro_y():
         """Gets the sensed y rotation.
 
         Returns:
@@ -18,7 +18,7 @@ class Gyrometer:
         return KIPR.gyro_y()
 
     @staticmethod
-    def gyro_z() -> int:
+    def gyro_z():
         """Gets the sensed z rotation.
 
         Returns:
@@ -27,7 +27,7 @@ class Gyrometer:
         return KIPR.gyro_z()
 
     @staticmethod
-    def gyro_calibrate() -> int:
+    def gyro_calibrate():
         """Initiates a calibration of the gyrometer.
 
         Note:

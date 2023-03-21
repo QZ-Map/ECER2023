@@ -4,7 +4,7 @@ class Compass:
     """
 
     @staticmethod
-    def calibrate() -> None:
+    def calibrate():
         """
         Begin calibrating the compass.
         Will display the calibration parameter results which can be used in the future with set_compass_params
@@ -13,7 +13,7 @@ class Compass:
         KIPR.calibrate_compass()
 
     @staticmethod
-    def set_params(meanX: float, meanY: float, meanZ: float, W1: float, W2: float, div_E1: float, div_E2: float) -> None:
+    def set_params(meanX, meanY, meanZ, W1, W2, div_E1, div_E2):
         """
         Set the compass parameters based on a previous calibration.
         Provided by Dr. Andrew H. Fagg and Twister Robotics
@@ -29,7 +29,7 @@ class Compass:
         KIPR.set_compass_params(meanX, meanY, meanZ, W1, W2, div_E1, div_E2)
 
     @staticmethod
-    def get_angle() -> float:
+    def get_angle():
         """
         Get the current compass heading.
         Provided by Dr. Andrew H. Fagg and Twister Robotics
