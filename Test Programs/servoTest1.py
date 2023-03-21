@@ -67,12 +67,12 @@ class Servo:
             stepSize += (1 if (position>currentPos) else -1)
             stepTime = int(time / ((position-currentPos)/stepSize))
         substepCount = (position-currentPos) // stepSize
-        #print(stepTime, stepSize, substepCount)
+        print(stepTime, stepSize, substepCount)
         for x in range(1, substepCount+1):
-            #print("move to: ", (startPos+stepSize*x), ", wait: ", stepTime)
+            print("move to: ", (startPos+stepSize*x), ", wait: ", stepTime)
             self.set_position(startPos + stepSize*x)
             KIPR.msleep(stepTime)
-        #print("move to: ", position)
+        print("move to: ", position)
         self.set_position(position)
     
         
@@ -89,3 +89,23 @@ class Servo:
         Disable all four servo channels.
         """
         KIPR.disable_servos()
+
+
+
+
+servo1 = Servo(1)
+servo1.enable_all()
+
+servo1.timed_movement(0, 500)
+
+
+"""        
+servo1.timed_movement(0, 500)
+KIPR.msleep(100)
+servo1.timed_movement(1000, 500)
+KIPR.msleep(100)
+servo1.timed_movement(0, 1000)
+KIPR.msleep(1000)
+servo1.timed_movement(1000, 1000)
+KIPR.msleep(1000)
+"""

@@ -1,3 +1,72 @@
+class Motor:    
+    def __init__(self, port):
+        self.port = port
+                
+    def __str__(self):
+        return str(self.gmpc())
+    
+    
+    def gmpc(self):
+        """Returns the current position of the motor in ticks."""
+        return KIPR.get_motor_position_counter(self.port)
+    
+    def cmpc(self):
+        """Clears the current position of the motor in ticks."""
+        KIPR.clear_motor_position_counter(self.port)
+    
+    def freeze(self):
+        """Stops the motor and holds its current position."""
+        KIPR.freeze(self.port)
+    
+    def gmd(self):
+        """Returns 1 if the motor has finished moving, 0 otherwise."""
+        return bool(KIPR.get_motor_done(self.port))
+    
+    def bmd(self):
+        """Waits until the motor has finished moving."""
+        KIPR.block_motor_done(self.port)
+    
+    def fd(self):
+        """Sets the motor to move forward at full velocity."""
+        KIPR.fd(self.port)
+    
+    def bk(self):
+        """Sets the motor to move backward at full velocity."""
+        KIPR.bk(self.port)
+    
+    def off(self):
+        """Stops the motor and releases its current position."""
+        KIPR.off(self.port)
+    
+    def mapv(self, percentVelocity):
+        """Sets the motor to move at the specified percentage of maximum velocity."""
+        KIPR.motor(self.port, percentVelocity)
+    
+    def mapp(self, percentPower):
+        """Sets the motor to move at the specified percentage of maximum power."""
+        KIPR.motor_power(self.port, percentPower)
+    
+    def mav(self, speed):
+        """Sets the motor to move at the specified speed in -1500 to 1500 ticks / second."""
+        KIPR.move_at_velocity(self.port, speed)
+    
+    def mtp(self, speed, pos):
+        """Sets the motor to move to the specified position at the specified speed."""
+        KIPR.move_to_position(self.port, speed, pos)
+    
+    def mrp(self, speed, delta_pos):
+        """Sets the motor to move to the specified relative position at the specified speed."""
+        KIPR.move_relative_position(self.port, speed, delta_pos)
+    
+    @staticmethod
+    def alloff():
+        """Stops all motors on the robot and releases their current positions."""
+        KIPR.alloff()
+        
+     
+     
+     
+        
 class Wheels: 
     """ The Wheel class represents a pair of motors that are connected to a single physical wheelsystem
     It provides methods for controlling the movement of the wheels """
@@ -100,3 +169,11 @@ class Wheels:
         rotationDistance = self.distanceToTicks((self.rotarionU * angle) / 360)
         self.motorRight.mrp(speed, -int(rotationDistance))
         self.motorLeft.mrp(speed, int(rotationDistance))
+        
+
+
+wheels = Wheels(0, 1, 69, 165)
+wheels.standRotate(180, 1000)
+while not wheels.gmd():
+    KIPR.msleep(10)    
+print("finished")

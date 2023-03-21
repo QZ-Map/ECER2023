@@ -26,13 +26,13 @@ class Motor:
         """Waits until the motor has finished moving."""
         KIPR.block_motor_done(self.port)
     
-    def fd(self, percentVelocity):
-        """Sets the motor to move forward at the specified percentage of maximum velocity."""
-        KIPR.fd(self.port, percentVelocity)
+    def fd(self):
+        """Sets the motor to move forward at full velocity."""
+        KIPR.fd(self.port)
     
-    def bk(self, percentVelocity):
-        """Sets the motor to move backward at the specified percentage of maximum velocity."""
-        KIPR.bk(self.port, percentVelocity)
+    def bk(self):
+        """Sets the motor to move backward at full velocity."""
+        KIPR.bk(self.port)
     
     def off(self):
         """Stops the motor and releases its current position."""
