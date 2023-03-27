@@ -1,6 +1,6 @@
 class Magnetometer:
     @staticmethod
-    def magneto_x() -> int:
+    def magneto_x():
         """
         Gets the sensed x magneto value
 
@@ -10,7 +10,7 @@ class Magnetometer:
         return KIPR.magneto_x()
 
     @staticmethod
-    def magneto_y() -> int:
+    def magneto_y():
         """
         Gets the sensed y magneto value
 
@@ -20,7 +20,7 @@ class Magnetometer:
         return KIPR.magneto_y()
 
     @staticmethod
-    def magneto_z() -> int:
+    def magneto_z():
         """
         Gets the sensed z magneto value
 
@@ -30,7 +30,7 @@ class Magnetometer:
         return KIPR.magneto_z()
 
     @staticmethod
-    def magneto_calibrate() -> int:
+    def magneto_calibrate():
         """
         Initiates a calibration of the magnetometer
 

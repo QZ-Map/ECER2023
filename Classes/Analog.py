@@ -2,14 +2,14 @@ class Analog:
     """
     This class provides an interface for reading analog sensor values.
     """
-    def __init__(self, port: int) -> None:
+    def __init__(self, port):
         self.port = port
                 
-    def __str__(self) -> str:
+    def __str__(self):
         return str(self.analog())
     
 
-    def analog(self) -> int:
+    def analog(self):
         """
         Gets the 12-bit analog value of the sensor connected to the specified port.
 
@@ -18,7 +18,7 @@ class Analog:
         """
         return KIPR.analog(self.port)
 
-    def analog10(self) -> int:
+    def analog10(self):
         """
         Gets the 10-bit analog value of the sensor connected to the specified port.
 
@@ -27,7 +27,7 @@ class Analog:
         """
         return KIPR.analog10(self.port)
 
-    def analog8(self) -> int:
+    def analog8(self):
         """
         Gets the 8-bit analog value of the sensor connected to the specified port.
 
@@ -36,7 +36,7 @@ class Analog:
         """
         return KIPR.analog8(self.port)
 
-    def analog_et(self) -> int:
+    def analog_et(self):
         """
         Gets the 10-bit analog value of the ET sensor connected to the specified port.
 
@@ -45,7 +45,7 @@ class Analog:
         """
         return KIPR.analog_et(self.port)
 
-    def set_pullup(self, pullup: int) -> None:
+    def set_pullup(self, pullup):
         """
         Sets the analog pullup status for the sensor connected to the specified port.
 
@@ -54,7 +54,7 @@ class Analog:
         """
         KIPR.set_analog_pullup(self.port, pullup)
 
-    def get_pullup(self) -> int:
+    def get_pullup(self):
         """
         Gets the analog pullup status for the sensor connected to the specified port.
 
@@ -65,25 +65,25 @@ class Analog:
     
     
     @staticmethod
-    def analog_(port: int) -> int:
+    def analog_(port):
         return KIPR.analog(port)
     
     @staticmethod
-    def analog10_(port: int) -> int:
+    def analog10_(port):
         return KIPR.analog10(port)
     
     @staticmethod
-    def analog8_(port: int) -> int:
+    def analog8_(port):
         return KIPR.analog8(port)
     
     @staticmethod
-    def analog_et_(port: int) -> int:
+    def analog_et_(port):
         return KIPR.analog_et(port)
     
     @staticmethod
-    def set_pullup_(port: int, pullup: int) -> None:
+    def set_pullup_(port, pullup):
         KIPR.set_analog_pullup(port, pullup)
         
     @staticmethod
-    def get_pullup_(port: int) -> int:
+    def get_pullup_(port):
         return KIPR.get_analog_pullup(port)
