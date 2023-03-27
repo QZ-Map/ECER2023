@@ -16,7 +16,7 @@ def camPosX(x):
     """Chanel x, returns between -80 and 79"""
     KIPR.camera_update()
     return KIPR.get_object_center_x(0, 0)
-    not(KIPR.get_object_count(0)>0 and KIPR.get_object_area(0, 0)>200 and 80<KIPR.get_object_center_x(0, 0)<100
+    not(KIPR.get_object_count(0)>0 and KIPR.get_object_area(0, 0)>200 and 80<KIPR.get_object_center_x(0, 0)<100)
 
     while (not(KIPR.get_object_count(0)>0 and KIPR.get_object_area(0, 0)>200 and 80<KIPR.get_object_center_x(0, 0)<100)):
         KIPR.motor(0, 30)
