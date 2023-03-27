@@ -25,8 +25,6 @@ def setRealRotation(deg):
     KIPR.set_create_total_angle(deg/0.875)
 
 
-
-
 def setup():
     print("Setup, connecting")
     KIPR.create_connect()
@@ -36,6 +34,9 @@ def setup():
     # start shutdown timer ##disabled 4 testing
     ## wait4light()
     ## KIPR.shut_down_in(119)
+    KIPR.camera_load_config("nils1")
+    KIPR.camera_open()
+    KIPR.camera_update()
 
 def wait4light(): # non functional right now
     """ only continuies when starting light has been activated
@@ -45,9 +46,75 @@ def wait4light(): # non functional right now
     KIPR.wait_for_light(port)
 
 ### ^^^^^ temporary for functions that belong into an other file
+# Driving vars
 fwd = 100
 bwd = -100
 turn = 100
+# Black line
+black = 2500
+
+
+def camFound(x):
+    """Chanel x"""
+    KIPR.camera_update()
+    d = KIPR.get_object_count(0)>0
+    print(str(d))
+    e = KIPR.get_object_area(0, 0)>200
+    print(str(e))
+    return d and e
+def camPosX(x):
+    """Chanel x, returns between -80 and 79"""
+    KIPR.camera_update()
+    return KIPR.get_object_center_x(x, 0)
+
+
+def testAnalog():
+    #print("left:" + str(KIPR.get_create_lcliff_amt()))
+    print("left front:" + str(KIPR.get_create_lcliff_amt()))
+    #print("Right" + str(KIPR.get_create_rcliff_amt()))
+    print("right front:" + str(KIPR.get_create_rcliff_amt()))
+
+
+def driveUntil(speed_mm_s, until):
+    """ speed in mm/sec, Until in Lamda
+        | for backward driving speed negative, distance positive
+        | should return isBumped in the future
+    """
+    while not until():
+        KIPR.create_drive_direct(speed_mm_s, speed_mm_s)
+    KIPR.create_drive_direct(0, 0)
+    return
+
+def orientToLine():
+    print("drive until line")
+    or_ = lambda : KIPR.get_create_lcliff_amt() < black or KIPR.get_create_rcliff_amt() < black
+    and_ = lambda : (KIPR.get_create_lcliff_amt() < black) and (KIPR.get_create_rcliff_amt() < black)
+    driveUntil(50, or_)
+    print("orient")
+    testAnalog()
+    KIPR.msleep(100)
+    if KIPR.get_create_lcliff_amt() > black:
+        while KIPR.get_create_lcliff_amt() > black:
+            KIPR.create_drive_direct(50,0)
+    elif KIPR.get_create_rcliff_amt() > black:
+        while KIPR.get_create_rcliff_amt() > black:
+            KIPR.create_drive_direct(0,50)
+    print("2:")
+    testAnalog()
+    KIPR.msleep(100)
+    KIPR.create_drive_direct(0, 0)
+    while or_():
+        if KIPR.get_create_lcliff_amt() < black:
+            KIPR.create_drive_direct(-50, 0)
+        if KIPR.get_create_rcliff_amt() < black:
+            KIPR.create_drive_direct(0,-50)
+    KIPR.create_drive_direct(0, 0)
+    print("3:")
+    testAnalog()
+    
+    
+        
+
 
 def driveStraight(speed_mm_s, distance_mm):
     """ speed in mm/sec, distance in mm
@@ -132,6 +199,19 @@ def gripperTilt(value):
     else:
         print("number out of bounds!  servo 0: 1400 - 2047")
 
+def orientToCamera(x):
+    """chanel x"""
+    print("orient to object of camera chanel: " + str(x))
+    if not camFound(x):
+        print("negative Camfound")
+        return False
+    print("after Camfound")
+    print("found" + str(camPosX(x)))
+    posX=camPosX(x)
+    while not (posX > -10 and posX < 10):
+        KIPR.create_drive_direct(fwd*posX/100, -fwd*posX/100)
+        posX=camPosX(x)
+    return True
 
 
 
@@ -144,9 +224,12 @@ print("after setup")
 #rotateAbsolute(100)
 #rotateAbsolute(-30)
 #rotateAbsolute(0)
+#print("findline")
+orientToCamera(0)
+#orientToLine()
 
-rotateLeft(3600)
-rotateRight(3600)
+#rotateLeft(3600)
+#rotateRight(3600)
 
 #gripperHeight(0)
 #driveStraight(fwd,15)
