@@ -32,8 +32,8 @@ def setup():
     KIPR.set_create_distance(0)
     KIPR.set_create_total_angle(0)
     # start shutdown timer ##disabled 4 testing
-    ## wait4light()
-    ## KIPR.shut_down_in(119)
+    wait4light()
+    KIPR.shut_down_in(119)
     KIPR.camera_load_config("nils1")
     KIPR.camera_open()
     KIPR.camera_update()
