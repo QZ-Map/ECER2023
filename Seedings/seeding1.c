@@ -29,11 +29,11 @@ int main()
     set_servo_position (grapperHeight, 850);
     
     create_drive_direct(200, -200);
-    msleep(1500);
+    msleep(1600);
     
     
     create_drive_direct(-200, 200);
-    msleep(1500);
+    msleep(1600);
     
     create_drive_direct(-200, -200);
     msleep(200);
