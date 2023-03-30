@@ -16,11 +16,8 @@ void timed_servo_movement(port, position, time){
             substepCount *= -1;
         }
         printf("substepCount: %i; stepSize: %i; stepTime: %i; \n", substepCount, stepSize, stepTime);
-        /* print(stepTime, stepSize, substepCount) */
         int i=0;
         while(i<=substepCount){
-            /* print("move to: ", (startPos+stepSize*x), ", wait: ", stepTime) */
-            /* printf("%i\n", (startPos + stepSize*i)); */
             if(position>startPos){
                 set_servo_position(port, (startPos + stepSize*i));
             }else{
@@ -30,41 +27,69 @@ void timed_servo_movement(port, position, time){
             msleep(stepTime);
             i++;
         }
-        /* print("move to: ", position) */
         set_servo_position(port, position);   
     } 
 }
 
 int main()
 {
-    int count, xPos, yPos, area;
-
-
     printf("Hello World\n");
-    int height=0, grapperHeight=1, grapperGrip=2, grapperClosed=1100, grapperClosedLog=1150, grapperOpen=1680;   
+
+    int count, xPos, yPos, area;
+    int height=0, grapperHeight=1, grapperGrip=2, grapperClosed=1100, grapperClosedLog=1150, grapperOpen=1680;    
+
+       
+    printf("setup\n");
     create_connect();
     enable_servos();
+    
+    set_create_distance(0);
+    set_create_total_angle(0);
+    
+    timed_servo_movement(height, 0, 500);
+    set_servo_position (grapperHeight, 0);
+    set_servo_position (grapperGrip, 1155);  
+    
+    wait_for_light(0);
+	shut_down_in(115); 
+    
+    printf("start\n");    
+    
+    create_drive_direct(200, 200);
+    msleep(10);
+
+    set_servo_position (height, 300);
+    msleep(1000);
+    set_servo_position (grapperHeight, 850);
+    
+    create_drive_direct(200, -200);     //rotate to flip ring tower
+    msleep(1500);    
+    
+    create_drive_direct(-200, 200);
+    msleep(1400);
+    create_drive_direct(0, 0);
 
     
+    create_drive_direct(200, 200);      //position for towers
+    msleep(2400);
+    create_drive_direct(0, 0);
     
 
-    
-
-    //!tower code
-    camera_load_config("game");
+    //!tower 1
+    camera_load_config("game");         //setup camery
     camera_open();
+    printf("Tower 1\n");
 
-    timed_servo_movement(height, 1800, 2000);
+    timed_servo_movement(height, 1800, 2000);       //prepare arm for log pickup
     set_servo_position(grapperHeight, 880);
     set_servo_position(grapperGrip, grapperOpen);
     msleep(100);
 
-    create_drive_direct(-200, 200);
-    msleep(200);
+    create_drive_direct(-200, 200);     //rotate to better position for tower detection
+    msleep(100);
     create_drive_direct(0, 0);
 
     camera_update();
-    printf("test_camera");
 
     //orient to center of cube
     while(get_object_center_x(0, 0) < 89 || get_object_center_x(0, 0) > 91 || get_object_area(0, 0) < 400 || get_object_count(0) < 1){ 
@@ -76,67 +101,66 @@ int main()
             msleep(10);
         }
         camera_update();
-        count = get_object_count(0);
-        xPos = get_object_center_x(0, 0);
-        yPos = get_object_center_y(0, 0);
-        area = get_object_area(0, 0);
-        printf("count: %i, xPos: %i, yPos: %i, area: %i\n", count, xPos, yPos, area);
     }
 
-    printf("\n\ndrive\n\n");
+    printf("get Log 1\n");
 
     //drive to cube
-    while(get_create_rbump() == 0 && get_create_lbump() == 0){        //get_object_area(0, 0) < 2750
+    while(get_create_rbump() == 0 && get_create_lbump() == 0){  
         if(get_object_center_x(0, 0)<90){           
-            create_drive_direct(90, 100);
+            create_drive_direct(80, 100);
             msleep(10);
-        }else if(get_object_center_x(0, 0)<90){          
-            create_drive_direct(100, 90);
+        }else if(get_object_center_x(0, 0)>90){          
+            create_drive_direct(100, 80);
             msleep(10);
         }else{
             create_drive_direct(100, 100);
             msleep(10);
         }
         camera_update();
-
-        count = get_object_count(0);
-        xPos = get_object_center_x(0, 0);
-        yPos = get_object_center_y(0, 0);
-        area = get_object_area(0, 0);
-        printf("count: %i, xPos: %i, yPos: %i, area: %i\n", count, xPos, yPos, area);
     }
 
     create_drive_direct(0, 0);
 
-    timed_servo_movement(grapperGrip, grapperClosedLog, 500);
+    timed_servo_movement(grapperGrip, grapperClosedLog, 500);   //pick up log
     msleep(100);    
     timed_servo_movement(height, 2000, 500);
     timed_servo_movement(grapperHeight, 200, 500);
 
-    msleep(5000);     //long wait for other bot
+    printf("wait for other bot\n");
+    msleep(25000);                  //long wait for other bot
+
+    create_drive_direct(-50, -50);
+    msleep(300);
 
     create_drive_direct(100, -100);         //rotate right
-    msleep(2800);
+    msleep(2900);
     create_drive_direct(0, 0);
 
-    create_drive_direct(200, 200);      //open grapper
-    msleep(1000);     
-    timed_servo_movement(height, 1800, 500);
-    set_servo_position(grapperHeight, 880);
-    set_servo_position(grapperGrip, grapperOpen);
+    printf("place Log 1\n");
+    create_drive_direct(200, 200);          //place cube
+    msleep(1600);   
+    create_drive_direct(0, 0);  
+    timed_servo_movement(height, 400, 2000);
+    timed_servo_movement(grapperHeight, 1100, 500);
+    timed_servo_movement(grapperGrip, grapperOpen, 200);
+    timed_servo_movement(grapperHeight, 880, 200);
+
+    timed_servo_movement(height, 1800, 1000);
+
 
     
-
+    printf("Tower 2\n");
     create_drive_direct(-100, 100);         //rotate left and drive to second tower
-    msleep(1200);
+    msleep(1500);
     create_drive_direct(200, 200); 
     msleep(3000);
     create_drive_direct(-100, 100);       
-    msleep(1000);
+    msleep(1200);
     create_drive_direct(0, 0);
 
-    //!tower 2
 
+    //!tower 2
     //orient to center of cube
     while(get_object_center_x(0, 0) < 89 || get_object_center_x(0, 0) > 91 || get_object_area(0, 0) < 400 || get_object_count(0) < 1){ 
         if(get_object_center_x(0, 0)<90 || get_object_area(0, 0)<400){           
@@ -147,14 +171,9 @@ int main()
             msleep(10);
         }
         camera_update();
-        count = get_object_count(0);
-        xPos = get_object_center_x(0, 0);
-        yPos = get_object_center_y(0, 0);
-        area = get_object_area(0, 0);
-        //printf("count: %i, xPos: %i, yPos: %i, area: %i\n", count, xPos, yPos, area);
     }
 
-    printf("\n\ndrive\n\n");
+    printf("get Log 2\n");
 
     //drive to cube
     while(get_create_rbump() == 0 && get_create_lbump() == 0){        //get_object_area(0, 0) < 2750
@@ -169,33 +188,39 @@ int main()
             msleep(10);
         }
         camera_update();
-
-        count = get_object_count(0);
-        xPos = get_object_center_x(0, 0);
-        yPos = get_object_center_y(0, 0);
-        area = get_object_area(0, 0);
-        //printf("count: %i, xPos: %i, yPos: %i, area: %i\n", count, xPos, yPos, area);
     }
 
     create_drive_direct(0, 0);
 
-    
-    msleep(1000);
-
-    timed_servo_movement(grapperGrip, grapperClosedLog, 500);
+    timed_servo_movement(grapperGrip, grapperClosedLog, 500);   //pick up log
     msleep(100);    
     timed_servo_movement(height, 2000, 500);
     timed_servo_movement(grapperHeight, 200, 500);
 
-    msleep(5000);     //long wait for other bot
+    printf("wait for other bot\n");
+    msleep(15000);     //long wait for other bot
+
+    create_drive_direct(-50, -50);
+    msleep(300);
 
     create_drive_direct(100, -100);         //rotate right
-    msleep(3500);
+    msleep(3700);
     create_drive_direct(0, 0);
 
-    create_drive_direct(200, 200); 
-    msleep(1000);     
-    timed_servo_movement(grapperGrip, grapperOpen, 500);
+    printf("place Log 1\n");
+    create_drive_direct(200, 200);          //place cube
+    msleep(1600);   
+    create_drive_direct(0, 0);  
+    timed_servo_movement(height, 400, 2000);
+    timed_servo_movement(grapperHeight, 1100, 500);
+    timed_servo_movement(grapperGrip, grapperOpen, 200);
+    timed_servo_movement(grapperHeight, 880, 200);
+
+    timed_servo_movement(height, 1800, 1000);
+
+    create_drive_direct(-200, -200);
+    msleep(1500);
+    create_drive_direct(0, 0);
 
     create_disconnect();
 

@@ -46,12 +46,12 @@ int main()
     enable_servos();
 
     
-    set_servo_position (height, 0);
+    timed_servo_movement(height, 0, 500);
     set_servo_position (grapperHeight, 0);
     set_servo_position (grapperGrip, 1155);
     
     printf("setup\n");
-    //!wait_for_light(0);
+    //wait_for_light(0);
 	shut_down_in(100);    
     
     printf("start\n");
@@ -90,7 +90,7 @@ int main()
     msleep(100);
 
     create_drive_direct(-200, 200);
-    msleep(200);
+    msleep(100);
     create_drive_direct(0, 0);
 
     camera_update();
@@ -98,7 +98,7 @@ int main()
 
     //orient to center of cube
     while(get_object_center_x(0, 0) < 89 || get_object_center_x(0, 0) > 91 || get_object_area(0, 0) < 400 || get_object_count(0) < 1){ 
-        if(get_object_center_x(0, 0)<90){           
+        if(get_object_center_x(0, 0)<90 || get_object_area(0, 0)<400){           
             create_drive_direct(-20, 20);
             msleep(10);
         }else{          
@@ -138,22 +138,28 @@ int main()
 
     create_drive_direct(0, 0);
 
-    timed_servo_movement(grapperGrip, grapperClosedLog, 500);
+    timed_servo_movement(grapperGrip, grapperClosedLog, 500);   //pick up log
     msleep(100);    
     timed_servo_movement(height, 2000, 500);
     timed_servo_movement(grapperHeight, 200, 500);
 
-    msleep(5000);     //long wait for other bot
+    msleep(40000);     //long wait for other bot
+
+    create_drive_direct(-50, -50);
+    msleep(100);
 
     create_drive_direct(100, -100);         //rotate right
     msleep(2800);
     create_drive_direct(0, 0);
 
-    create_drive_direct(200, 200);      //open grapper
-    msleep(1000);     
-    timed_servo_movement(height, 1800, 500);
+    create_drive_direct(200, 200);      //place cube
+    msleep(1600);   
+    create_drive_direct(0, 0);  
+    timed_servo_movement(height, 0, 2000);
+    timed_servo_movement(grapperHeight, 1050, 500);
+    timed_servo_movement(grapperGrip, grapperOpen, 200);
+    timed_servo_movement(height, 1800, 1000);
     set_servo_position(grapperHeight, 880);
-    set_servo_position(grapperGrip, grapperOpen);
 
     
 
@@ -165,11 +171,11 @@ int main()
     msleep(1000);
     create_drive_direct(0, 0);
 
-    //!2. cube
+    //!tower 2
 
     //orient to center of cube
     while(get_object_center_x(0, 0) < 89 || get_object_center_x(0, 0) > 91 || get_object_area(0, 0) < 400 || get_object_count(0) < 1){ 
-        if(get_object_center_x(0, 0)<90){           
+        if(get_object_center_x(0, 0)<90 || get_object_area(0, 0)<400){           
             create_drive_direct(-20, 20);
             msleep(10);
         }else{          
@@ -207,25 +213,33 @@ int main()
         //printf("count: %i, xPos: %i, yPos: %i, area: %i\n", count, xPos, yPos, area);
     }
 
+    create_drive_direct(0, 0);
+
     
     msleep(1000);
 
-    create_drive_direct(0, 0);
-
-    timed_servo_movement(grapperGrip, grapperClosedLog, 500);
+    timed_servo_movement(grapperGrip, grapperClosedLog, 500);   //pick up log
     msleep(100);    
     timed_servo_movement(height, 2000, 500);
     timed_servo_movement(grapperHeight, 200, 500);
 
     msleep(5000);     //long wait for other bot
 
+    create_drive_direct(-50, -50);
+    msleep(100);
+
     create_drive_direct(100, -100);         //rotate right
     msleep(3500);
     create_drive_direct(0, 0);
 
-    create_drive_direct(200, 200); 
-    msleep(1000);     
-    timed_servo_movement(grapperGrip, grapperOpen, 500);
+    create_drive_direct(200, 200);      //place cube
+    msleep(1600);   
+    create_drive_direct(0, 0);  
+    timed_servo_movement(height, 0, 2000);
+    timed_servo_movement(grapperHeight, 1050, 500);
+    timed_servo_movement(grapperGrip, grapperOpen, 200);
+    timed_servo_movement(height, 1800, 1000);
+    set_servo_position(grapperHeight, 880);
 
     create_disconnect();
 
