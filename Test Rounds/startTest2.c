@@ -96,7 +96,7 @@ int main()
     camera_update();
     printf("test_camera");
 
-    //orient to center of cube
+    //orient to center of cube    
     while(get_object_center_x(0, 0) < 89 || get_object_center_x(0, 0) > 91 || get_object_area(0, 0) < 400 || get_object_count(0) < 1){ 
         if(get_object_center_x(0, 0)<90 || get_object_area(0, 0)<400){           
             create_drive_direct(-20, 20);
